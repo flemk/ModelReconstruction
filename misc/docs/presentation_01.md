@@ -155,3 +155,26 @@ This results in:
 
 ### 1.4 But what about n-dimensions?
 How do we create a n-dimensional function?
+
+The problem is the ```np.meshgrid()``` function. Its usage is defined as:
+
+```
+numpy.meshgrid(*xi, copy=True, sparse=False, indexing='xy')
+
+Return coordinate matrices from coordinate vectors.
+
+Make N-D coordinate arrays for vectorized evaluations of N-D scalar/vector fields over N-D grids, given one-dimensional coordinate arrays x1, x2,…, xn.
+
+Parameters
+    x1, x2,…, xn: array_like
+        1-D arrays representing the coordinates of a grid.
+
+[...]
+```
+
+So e.g. if we have 35-dimensions, we need to execute as follows: ```np.meshgrid(x1, x2, ..., x35)```. There are some simplifications with library ```itertools``` possible or just by ```numpy.mgrid()```, but I have'nt looked into that yet.
+
+> EDIT: Acutallly it'll work with ```np.mgrid()```. (s. https://numpy.org/doc/stable/reference/generated/numpy.mgrid.html)
+
+### 1.5 Reconstruction of time series
+tba.
