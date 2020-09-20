@@ -25,7 +25,7 @@ Where ```x_bins``` and ```y_bins ``` represent the meshs for the two dimensions.
  [0. 0. 0. ... 0. 0. 0.]]
 ```
 
-We also need counting meshs to count how often a bin has been visited by the phasplot:
+We also need counting meshs to count how often a bin has been visited by the phaseplot:
 
 ```python
 x_count, y_count = np.meshgrid(xd, yd)
@@ -103,7 +103,9 @@ Which reults in:
 
 ![mean change as vectorfield](./vectorfield.png "mean change as vectorfield")
 
-In closeup:
+There seem to be artifacts on the top and on the right, which are both on the edge. I assume the transfer-function is not correctly implemented. But in the 3D case (Lorenz attractor) those artifacts are missing.
+
+In closeup the vectorfield meets our expectations:
 
 ![Drift-coefficient in closeup](./vectorfield_zoom.png "Drift-coefficient in closeup")
 
