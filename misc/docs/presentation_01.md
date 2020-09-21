@@ -179,4 +179,48 @@ So e.g. if we have 35-dimensions, we need to execute as follows: ```np.meshgrid(
 > EDIT: Acutallly it'll work with ```np.mgrid()```. (s. https://numpy.org/doc/stable/reference/generated/numpy.mgrid.html)
 
 ### 1.5 Reconstruction of time series
-tba.
+
+#### 1.5.1 HO Reconstruction
+The 2-dimensional reconstruction can be done via the following code-snippet:
+```python
+dt = 0.01
+T = 200 * np.pi
+n = int(T / dt)
+sqrtdt = np.sqrt(dt)
+
+epsilon = 0.01
+
+x_ = []
+v_ = []
+x_ = np.zeros(n)
+v_ = np.zeros(n)
+x_[0] = 1
+v_[0] = 0
+
+for i in range(n - 1):
+    x_[i + 1] = x_[i]
+    v_[i + 1] = v_[i]
+    # 1. Deterministic dynamics
+    x_[i + 1] += x_bins[transform(x_[i], dx, nx)][transform(v_[i], dy, ny)] * dt * 1000
+    v_[i + 1] += y_bins[transform(x_[i], dx, nx)][transform(v_[i], dy, ny)] * dt * 1000
+    # 2. Stochastic dynamics
+    # ToDo: Implement noise amplitudes g_ij() [?] and random gamma. [1](12)
+    x_[i + 1] += sqrtdt * np.random.randn() * epsilon
+    v_[i + 1] += sqrtdt * np.random.randn() * epsilon
+```
+
+This yields for the HO to the graph below. In the beginning the sinusoids act like expected, but with a lot of noise. Unfortunetely the trajectories seem to enter a "stable state" when calculated further. This state must be represented by a "0-vector" in the vectorfield above. This can be probably resolved by creating longer time-series. The sampled time-series in this case had only 20 periods.
+
+![Reconstructed HO](./HO_reconstructed.png "Reconstructed HO")
+
+#### 1.5.2 Lorenz Reconstruction
+There is some wierd error, which has to do with the offset. Resolve trough altering the transfer function?
+
+## 2 Whats still to do
+Or what we should discuss now
+
+- Correctness of transfer function
+    
+    --> It may be incorrect: artifacts and index errors
+
+- n-dimensional implementation
