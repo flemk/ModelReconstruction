@@ -219,8 +219,10 @@ There is some wierd error, which has to do with the offset. Resolve trough alter
 ## 2 Whats still to do
 Or what we should discuss now
 
-- Correctness of transfer function
+- Correctness of transform function
     
-    --> It may be incorrect: s. artifacts and index errors
+    --> It may be incorrect: s. artifacts and index errors. But these seem to decrease with increasing bins.
+
+    --> On Lorenz attractor it works perfectly fine, when it comes to the non-noised. when it's noised the function iis misbehaving.
 
 - n-dimensional implementation
