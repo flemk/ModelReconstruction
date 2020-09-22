@@ -221,6 +221,6 @@ Or what we should discuss now
 
 - Correctness of transfer function
     
-    --> It may be incorrect: artifacts and index errors
+    --> It may be incorrect: s. artifacts and index errors
 
 - n-dimensional implementation
