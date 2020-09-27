@@ -8,7 +8,11 @@
 
 - [x] ✅ ```RESOLVED``` n-dimensional implementation
 
-- [ ] 🟥 ```TODO``` How to solve FPE in python?
+- [ ] 🟥 ```TODO``` Van der pol example
+
+- [ ] 🟥 ```TODO``` Function to create time series with
+
+- [ ] 🟧 ```TODO``` How to solve FPE in python?
 
 ![formula](https://render.githubusercontent.com/render/math?math={\frac{\partial}{\partial%20t}p(\vec{x},t+\tau|\vec{x},t)=(-\sum_i\frac{\partial}{\partial%20x_i}D_i^{(1)}(\vec{x},t)+\sum_{ij}\frac{\partial}{\partial%20x_ix_j}D_ij^{(2)}(\vec{x},t))\cdotp(\vec{x},t+\tau|\vec{x},t)})
 
@@ -16,7 +20,7 @@
     \frac{\partial}{\partial t} p(\vec{x}, t + \tau | \vec{x}, t) = (- \sum_i \frac{\partial}{\partial x_i} D_i^{(1)}(\vec{x}, t) + \sum_{ij} \frac{\partial}{\partial x_i x_j} D_ij^{(2)}(\vec{x}, t)) \cdot p(\vec{x}, t + \tau | \vec{x}, t)
 $$ -->
 
-- [ ] 🟥 ```TODO``` How to actually derivate a field? 
+- [ ] 🟧 ```TODO``` How to actually derivate a field? 
 
 ![formula](https://render.githubusercontent.com/render/math?math={\frac{\partial}{\partial%20x_i}D_i^{(1)}\text{and}\frac{\partial}{\partial%20x_ix_j}D_ij^{(2)}\text{[1](2)}})
 
@@ -24,7 +28,7 @@ $$ -->
     \frac{\partial}{\partial x_i} D_i^{(1)} \text{ and } \frac{\partial}{\partial x_i x_j} D_ij^{(2)} \text{ [1](2)}
 $$ -->
 
-- [ ] 🟥 ```TODO``` Is it true that 
+- [ ] 🟧 ```TODO``` Is it true that 
 
 ![formula](https://render.githubusercontent.com/render/math?math={<a%20\cdot%20b>=<a>%20\cdot<b>})
 
