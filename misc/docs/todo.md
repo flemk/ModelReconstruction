@@ -26,7 +26,7 @@ $$ -->
 
 - [ ] 🟥 ```TODO``` Is it true that 
 
-![formula](https://render.githubusercontent.com/render/math?math={<a%20\cdotb>=<a>%20\cdot<b>})
+![formula](https://render.githubusercontent.com/render/math?math={<a%20\cdot%20b>=<a>%20\cdot<b>})
 
 <!-- $$
     < a \cdot b> = < a > \cdot < b >
