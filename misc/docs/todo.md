@@ -8,19 +8,8 @@
 
 - [x] ```RESOLVED``` n-dimensional implementation
 
-- [ ] 🟥 ```TODO``` How to solve FPE in python?
+- [ ] 🟥 ```TODO``` How to solve FPE in python? $\frac{\partial}{\partial t} p(\vec{x}, t + \tau | \vec{x}, t) = (- \sum_i \frac{\partial}{\partial x_i} D_i^{(1)}(\vec{x}, t) + \sum_{ij} \frac{\partial}{\partial x_i x_j} D_ij^{(2)}(\vec{x}, t)) \cdot p(\vec{x}, t + \tau | \vec{x}, t)$
 
-    $$
-        \frac{\partial}{\partial t} p(\vec{x}, t + \tau | \vec{x}, t) = (- \sum_i \frac{\partial}{\partial x_i} D_i^{(1)}(\vec{x}, t) + \sum_{ij} \frac{\partial}{\partial x_i x_j} D_ij^{(2)}(\vec{x}, t)) \cdot p(\vec{x}, t + \tau | \vec{x}, t)
-    $$
+- [ ] 🟥 ```TODO``` How to actually derivate a field? $\frac{\partial}{\partial x_i} D_i^{(1)} \text{ and } \frac{\partial}{\partial x_i x_j} D_ij^{(2)} \text{ [1](2)}$
 
-- [ ] 🟥 ```TODO``` How to actually derivate a field? 
-$$
-    \frac{\partial}{\partial x_i} D_i^{(1)} \text{ and } \frac{\partial}{\partial x_i x_j} D_ij^{(2)} \text{ [1](2)}
-$$
-
-- [ ] 🟥 ```TODO``` Is it true that
-$$
-    < a \cdot b> = < a > \cdot < b >
-$$
-If it's true, it'll make calculation of $D_{ij}^{(2)}$ easier.
+- [ ] 🟥 ```TODO``` Is it true that: $< a \cdot b> = < a > \cdot < b >$? If it's true, it'll make calculation of $D_{ij}^{(2)}$ easier.
