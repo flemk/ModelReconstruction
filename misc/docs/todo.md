@@ -31,4 +31,4 @@ $$ -->
 <!-- $$
     < a \cdot b> = < a > \cdot < b >
 $$ -->
-If it's true, it'll make calculation of $D_{ij}^{(2)}$ easier.
+If it's true, it'll make calculation of D^(2) easier.
