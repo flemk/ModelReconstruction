@@ -14,6 +14,14 @@
 
 - [ ] 🟥 ```TODO``` Implement abstract function to analyze every kind of defined function ```f()```, so that the notebook looses weight, and not every kind of funtion needs a seperate section.
 
+- [ ] 🟥 ```TODO``` Create class ```StochasticAnalysis```:
+    
+    ```.D_1()``` to get drift
+
+    ```.D_2()``` to get diffusion
+
+    ```.analyze()``` to analyze abstract and return graphs and stuff
+
 - [x] ✅ ```RESOLVED``` Function to create time series with
 > I used ```scipy.integrate.solve_ivp()``` together with custom ```f(t, x)```.
 
