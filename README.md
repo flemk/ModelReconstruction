@@ -17,6 +17,8 @@
 
 - [ ] 🟥 ```TODO``` Implement abstract function to analyze every kind of defined function ```f()```, so that the notebook looses weight, and not every kind of funtion needs a seperate section.
 
+- [ ] 🟧 ```TODO``` Implement D^(2) function. How to calculate D^(2) with n-dimensions? How many D^(2)'s are in n-dim?
+
 - [ ] 🟥 ```TODO``` Create class ```StochasticAnalysis```:
     
     ```.D_1()``` to get drift
@@ -44,7 +46,7 @@ $$ -->
     \frac{\partial}{\partial x_i} D_i^{(1)} \text{ and } \frac{\partial}{\partial x_i x_j} D_ij^{(2)} \text{ [1](2)}
 $$ -->
 
-- [ ] 🟧 ```TODO``` Is it true that 
+- [x] ✅ ```RESOLVED``` Is it true that 
 
 ![formula](https://render.githubusercontent.com/render/math?math={<a%20\cdot%20b>=<a>%20\cdot<b>})
 
@@ -52,3 +54,5 @@ $$ -->
     < a \cdot b> = < a > \cdot < b >
 $$ -->
 If it's true, it'll make calculation of D^(2) easier. See example of HO in ipynb.
+
+> It must be wrong! D^(2) needs to be calculated otherwise!
