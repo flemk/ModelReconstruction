@@ -48,7 +48,7 @@
     \frac{\partial}{\partial t} p(\vec{x}, t + \tau | \vec{x}, t) = (- \sum_i \frac{\partial}{\partial x_i} D_i^{(1)}(\vec{x}, t) + \sum_{ij} \frac{\partial}{\partial x_i x_j} D_ij^{(2)}(\vec{x}, t)) \cdot p(\vec{x}, t + \tau | \vec{x}, t)
 $$ -->
 
-- [ ] 🟥 ```TODO``` Solve FPE via wuler integration.
+- [ ] 🟥 ```TODO``` Solve FPE via euler integration.
 
 - [x] ✅ ```RESOLVED``` How to actually derivate a field? 
 
@@ -69,3 +69,10 @@ $$ -->
     > It must be wrong! D^(2) needs to be calculated otherwise!
 
 - [ ] 🟥 ```TODO``` Documentation as MD in ipynb.
+
+- [ ] 🟥 ```TODO``` There is a mistake in D^(2) calculation. Most probably k and j need to be swapped.
+    ```python
+    for j in range(dimension):
+        for k in range(dimension):
+            a_grid[j][c] += (series[j][i + tau] - series[j][i]) * (series[k][i + tau] - series[k][i])
+    ```
