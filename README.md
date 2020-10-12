@@ -40,7 +40,7 @@
 
 - [x] ✅ ```RESOLVED``` How to solve FPE in python? Or how to implement it: A field and a density function?
 
-    ![formula](https://render.githubusercontent.com/render/math?math={\frac{\partial}{\partial%20t}p(\vec{x},t+\tau|\vec{x},t)=(-\sum_i\frac{\partial}{\partial%20x_i}D_i^{(1)}(\vec{x},t)+\sum_{ij}%20+%20\frac{\partial}{\partial%20x_ix_j}D_ij^{(2)}(\vec{x},t))\cdotp(\vec{x},t+\tau|\vec{x},t)})
+    ![formula](https://render.githubusercontent.com/render/math?math={\frac{\partial}{\partial%20t}p(\vec{x},t%2B\tau|\vec{x},t)=(-\sum_i\frac{\partial}{\partial%20x_i}D_i^{(1)}(\vec{x},t)%2B\sum_{ij}%20+%20\frac{\partial}{\partial%20x_ix_j}D_ij^{(2)}(\vec{x},t))\cdot%20p(\vec{x},t%2B\tau|\vec{x},t)})
 
     > Euler integration. With IVP as one bin or more on phaseplot are one. the rest 0.
 
