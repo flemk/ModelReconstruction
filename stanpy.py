@@ -176,5 +176,8 @@ class StochasticAnalysis:
 # 1. standard transform function
 transform = lambda x, d, b: int((x + (d/2)) * np.floor(b / d)) - 1
 
+# 2. 1d transform function
+transform_1d = lambda x, d, b: int((x / max_val) * b)
+
 # 2. standard axis
 normaxis = lambda bins, dimension: np.meshgrid(*[np.arange(0, bins) for _ in range(dimension)])
