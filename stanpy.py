@@ -14,6 +14,7 @@ class StochasticAnalysis:
         self._diffusion = diffusion
         self._recontruction = reconstruction
 
+        self._fpe = None
         self._dimension = len(series)
 
     def D_1(self, series, dt=1, bins=250, tau=1, transform=None):
@@ -222,17 +223,26 @@ class StochasticAnalysis:
 
         return 0
 
-    def upwind_scheme(self, x=None, n_order=1):
+class FPE:
+    def __init__(self, drift, diffusion, dx):
+        self._drift = drift
+        self._diffusion = diffusion
+        self._dx = dx
+
+    def upwind_scheme(self, x, n_order=1):
         ''' Returns the dimensional derivate in n_order - order upwind-scheme.
         Particularly programmed for probability field W in the Fokker-Planck-Equation.
         
         Parameters:
-            - (np.ndarray) x: vector or field to derivate. If None self._series is choosen
+            - (np.ndarray) x: vector or field to derivate
             - (int) n_order: order of upwind-scheme. n-order in [1, 2, 3]
 
         Returns:
             - (np.ndarray) x_: vector derivate
         '''
+        pass
+
+    def solve(self, t_interval, dt):
         pass
 
 # 1. standard transform function
