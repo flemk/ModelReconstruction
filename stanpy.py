@@ -16,7 +16,7 @@ class StochasticAnalysis:
 
         self._dimension = len(series)
 
-    def D_1(self, series, dt, bins=250, tau=1, transform=None):
+    def D_1(self, series, dt=1, bins=250, tau=1, transform=None):
         ''' Retrieving n-dimensional Drift-Coefficient
 
         Parameters:
@@ -82,7 +82,7 @@ class StochasticAnalysis:
         '''
         return self._drift
 
-    def D_2(self, series, dt, bins=250, tau=1, transform=None):
+    def D_2(self, series, dt=1, bins=250, tau=1, transform=None):
         ''' Retrieving n-dimensional Drift-Coefficient
 
         Parameters:
@@ -212,6 +212,28 @@ class StochasticAnalysis:
         figs.append(fig)
 
         return figs
+
+    def analyze(self, dt):
+        ''' Calculate drift and diffusion coefficients.
+        ... using only one command.
+        '''
+        _ = self.D_1(self._series, dt)
+        _ = self.D_2(self._series, dt)
+
+        return 0
+
+    def upwind_scheme(self, x=None, n_order=1):
+        ''' Returns the dimensional derivate in n_order - order upwind-scheme.
+        Particularly programmed for probability field W in the Fokker-Planck-Equation.
+        
+        Parameters:
+            - (np.ndarray) x: vector or field to derivate. If None self._series is choosen
+            - (int) n_order: order of upwind-scheme. n-order in [1, 2, 3]
+
+        Returns:
+            - (np.ndarray) x_: vector derivate
+        '''
+        pass
 
 # 1. standard transform function
 transform = lambda x, d, b: int((x + (d/2)) * np.floor(b / d)) - 1

@@ -18,8 +18,8 @@ analysis = sp.StochasticAnalysis(time_series)
 analysis.analyze()
 
 # drift and diffusion coefficients are now stored in:
-analysis.drift
-analysis.diffusion
+analysis.drift()
+analysis.diffusion()
 
 # you can visualize them in the 2d case:
 analysis.visualize_2d()
