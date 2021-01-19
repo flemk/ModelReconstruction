@@ -8,10 +8,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class StochasticAnalysis:
-    def __init__(self, series, drift=None, diffusion=None):
-        self.series = series
-        self.drift = drift
-        self.diffusion = diffusion
+    def __init__(self, series, drift=None, diffusion=None, reconstruction=None):
+        self._series = series
+        self._drift = drift
+        self._diffusion = diffusion
+        self._recontruction = reconstruction
+
+        self._dimension = len(series)
 
     def D_1(self, series, dt, bins=250, tau=1, transform=None):
         ''' Retrieving n-dimensional Drift-Coefficient
@@ -27,6 +30,9 @@ class StochasticAnalysis:
         Returns:
             (array) Array of n-dim arrays, where the arrays represent the mean change of the i-th variable.
         '''
+        if self._drift is not None:
+            print('Drift is already defined. Will be overwritten by newer value.')
+
         dimension = len(series)
 
         # checking if all series have same size
@@ -66,7 +72,15 @@ class StochasticAnalysis:
         for j in range(dimension):
             a_grid[j] = calculate_mean_change_recursive(a_grid[j], b_grid[j], argument=(1 / (tau * dt)))
 
+        # save in class for later usage
+        self._drift = a_grid
+
         return a_grid
+
+    def drift(self):
+        ''' Returns calculated Drift-coefficitent.
+        '''
+        return self._drift
 
     def D_2(self, series, dt, bins=250, tau=1, transform=None):
         ''' Retrieving n-dimensional Drift-Coefficient
@@ -82,6 +96,9 @@ class StochasticAnalysis:
         Returns:
             (array) Array of n-dim arrays, where the arrays represent the mean change of the i-th variable.
         '''
+        if self._diffusion is not None:
+            print('Diffusion is already defined. Will be overwritten by newer value.')
+
         dimension = len(series)
 
         # checking if all series have same size
@@ -125,20 +142,43 @@ class StochasticAnalysis:
         for j in range(dimension):
             a_grid[j] = calculate_mean_change_recursive(a_grid[j], b_grid[j], argument=(1 / (tau * dt)))
 
+        # save in class for later usage
+        self._diffusion = a_grid
+
         return a_grid
 
-    def recontruct(self):
+    def diffusion(self):
+        ''' Returns calculated Diffusion-coefficitent.
+        '''
+        return self._diffusion
+
+    def recontruct(self, ivp=None):
+        ''' Reconstruct a time series with given initial values based on the precalculated coefficients
+
+        Parameters:
+            - (np.ndarray) ivp: Initial values in shape np.shape(series[0]). If None np.zeros(np.shape(series[0])) is choosen.
+
+        Returns:
+            - (np.ndarray) reconstructed: Calculated reconstructed timeseries.
+        '''
         pass
 
     def solve_fpe(self):
+        ''' Series is converted to a Fokker-Planck-equation and then solved.
+        '''
         pass
 
     def visualize_2d(self, drift, diffusion):    
-        ''' [tba.]
+        ''' Plots precalculated drift- and diffusion-coefficients.
 
         Returns:
             (matplotlib.pyplot.figure) 2D tuple of figures.
-        '''   
+        '''
+
+        # abort if dimension is not 2 - not plotable
+        if self._dimension != 2:
+            return 0
+
         figs = []
 
         # add drift coefficient D_1 to plot
@@ -175,9 +215,6 @@ class StochasticAnalysis:
 
 # 1. standard transform function
 transform = lambda x, d, b: int((x + (d/2)) * np.floor(b / d)) - 1
-
-# 2. 1d transform function
-transform_1d = lambda x, d, b: int((x / max_val) * b)
 
 # 2. standard axis
 normaxis = lambda bins, dimension: np.meshgrid(*[np.arange(0, bins) for _ in range(dimension)])
