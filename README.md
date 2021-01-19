@@ -21,8 +21,14 @@ analysis.analyze()
 analysis.drift()
 analysis.diffusion()
 
-# you can visualize them in the 2d case:
+# in the 2d case you can visualize them builtin:
 analysis.visualize_2d()
+
+# and you can reconstruct your series with choosen initial values:
+r = analysis.reconstruct()
+
+# by converting your coefficients into a FPE you might gain more insight:
+f = analysis.solve_fpe()
 ```
 
 ## ```FPE.ipynb``` - solution of the Fokker-Planck-Equation
