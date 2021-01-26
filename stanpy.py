@@ -224,15 +224,16 @@ class StochasticAnalysis:
         return 0
 
 class FPE:
-    def __init__(self, drift, diffusion, dx):
+    def __init__(self, drift, diffusion, ivp, dx):
         self._drift = drift
         self._diffusion = diffusion
+        self._ivp = ivp
         self._dx = dx
 
     def upwind_scheme(self, x, n_order=1):
         ''' Returns the dimensional derivate in n_order - order upwind-scheme.
         Particularly programmed for probability field W in the Fokker-Planck-Equation.
-        
+
         Parameters:
             - (np.ndarray) x: vector or field to derivate
             - (int) n_order: order of upwind-scheme. n-order in [1, 2, 3]
@@ -243,6 +244,8 @@ class FPE:
         pass
 
     def solve(self, t_interval, dt):
+        ''' Solve the Fokker-Planck-Equaion by euler-integration.
+        '''
         pass
 
 # 1. standard transform function
