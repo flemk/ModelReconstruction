@@ -1,0 +1,70 @@
+<style>
+* { box-sizing: border-box; }
+body {
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 1.4rem;
+}
+
+#bound-one {
+	background: #d0d8db;
+}
+#bound-two {
+	background: #dfcece;
+}
+#bound-three {
+	background: #D0D6B3;
+}
+.scroll-bound {
+	height: 500vh;
+}
+
+.content {
+		height: 100vh;
+		width: 100%;
+		position: sticky;
+		top:0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+    video {
+		width: 80%;
+	}
+
+</style>
+
+<div class="app">
+	<div id="bound-one" class="scroll-bound">
+		<div class="content">
+			<p>WebM Video</p>
+ 			<video width="600" muted preload>
+				<source src="ezgif-3-daa71266215d.mp4" type="video/mp4">
+				<p>Your user agent does not support the HTML5 Video element.</p>
+      </video>
+		</div>
+	</div>
+</div>
+
+<script>
+    const registerVideo = (bound, video) => {
+	bound = document.querySelector(bound);
+	video = document.querySelector(video);
+	const scrollVideo = ()=>{
+		if(video.duration) {
+			const distanceFromTop = window.scrollY + bound.getBoundingClientRect().top;
+			const rawPercentScrolled = (window.scrollY - distanceFromTop) / (bound.scrollHeight - window.innerHeight);
+			const percentScrolled = Math.min(Math.max(rawPercentScrolled, 0), 1);
+			
+			video.currentTime = video.duration * percentScrolled;
+		}
+		requestAnimationFrame(scrollVideo);
+	}
+	requestAnimationFrame(scrollVideo);
+}
+
+
+registerVideo("#bound-one", "#bound-one video");
+</script>
