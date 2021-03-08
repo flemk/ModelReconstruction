@@ -6,7 +6,7 @@ from scipy.integrate import solve_ivp
 from custom_utils import *
 
 # initialize ivp and coefficients
-bins = 200
+bins = 50
 interval = (-4, 4)
 dx = (max(interval) - min(interval)) / bins
 
@@ -27,6 +27,7 @@ d_v = mu * (epsilon - x_1 ** 2) * x_2 - (omega ** 2) * x_1
 #wxv[75:125, 75:125] = 100 # "mitte"
 #wxv[75:125, 5:55] = 100 # "links"
 wxv = np.exp(- 2 * x_1 ** 2 - 2 * x_2 ** 2)
+#wxv[3:13, 12:25] = 100
 
 wxv_ivp = wxv # this is our ivp
 
@@ -55,6 +56,19 @@ def fokker_planck_system(t, y):
     wxv = y
     wxv = wxv.reshape((bins, bins))
 
+    # apply neumann boundary conditions
+    # [!] DEBUG - tw20210203020900
+    # copy paste from Andreas
+    wxv[0,:]=(4.0*wxv[1,:]-wxv[2,:])/3.
+    wxv[-1,:]=(4.0*wxv[-2,:]-wxv[-3,:])/3.
+    wxv[:,-1]=(4.0*wxv[:,-2]-wxv[:,-3])/3.
+    wxv[:,0]=(4.0*wxv[:,1]-wxv[:,2])/3.
+    # at the corners
+    wxv[0,0]=4.0*wxv[1,1]-wxv[2,2]
+    wxv[-1,0]=4.0*wxv[-2,1]-wxv[-3,2]
+    wxv[0,-1]=4.0*wxv[1,-2]-wxv[2,-3]
+    wxv[-1,-1]=4.0*wxv[-2,-2]-wxv[-3,-3]
+
     # flatten the coefficients
     d_x_pos_ = d_x_pos.flatten()
     d_x_neg_ = d_x_neg.flatten()
@@ -80,7 +94,10 @@ def fokker_planck_system(t, y):
     # now apply for each point in grid y
     y_ = np.empty(len(y)) # initilize result array
     for i in range(len(y)):
-        y_[i] = - (epsilon - x_1_[i] ** 2) * y[i] + (g / 2) * d2wdv2[i] \
+        # I changed a sign, now it work more properly
+        #       |-- this one
+        #       v
+        y_[i] = + (epsilon - x_1_[i] ** 2) * y[i] + (g / 2) * d2wdv2[i] \
                 - d_x_pos_[i] * dwdx_pos[i] - d_x_neg_[i] * dwdx_neg[i] \
                 - d_v_pos_[i] * dwdv_pos[i] - d_v_neg_[i] * dwdv_neg[i]
 
