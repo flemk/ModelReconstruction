@@ -50,24 +50,43 @@ d_v_neg[d_v_neg >= 0] = 0 # all positive values of d_x are replaced by 0 includi
 y = wxv.flatten()
 
 def fokker_planck_system(t, y):
-    print('currently at t:%f' % (t))
+    if (t % 0.1 == 0):
+        print('currently at t:%f' % (t))
 
     # calculate wxv "field" from 1d flattend array y
     wxv = y
     wxv = wxv.reshape((bins, bins))
 
     # apply neumann boundary conditions
-    # [!] DEBUG - tw20210203020900
     # copy paste from Andreas
-    wxv[0,:]=(4.0*wxv[1,:]-wxv[2,:])/3.
-    wxv[-1,:]=(4.0*wxv[-2,:]-wxv[-3,:])/3.
-    wxv[:,-1]=(4.0*wxv[:,-2]-wxv[:,-3])/3.
-    wxv[:,0]=(4.0*wxv[:,1]-wxv[:,2])/3.
+    wxv[2, :] = (4.0 * wxv[3, :] - wxv[4, :]) / 3.
+    wxv[-3, :] = (4.0 * wxv[-4, :] - wxv[-5, :]) / 3.
+    wxv[:, -3] = (4.0 * wxv[:, -4] - wxv[:, -5]) / 3.
+    wxv[:, 2] = (4.0 * wxv[:, 3] - wxv[:, 4]) / 3.
     # at the corners
-    wxv[0,0]=4.0*wxv[1,1]-wxv[2,2]
-    wxv[-1,0]=4.0*wxv[-2,1]-wxv[-3,2]
-    wxv[0,-1]=4.0*wxv[1,-2]-wxv[2,-3]
-    wxv[-1,-1]=4.0*wxv[-2,-2]-wxv[-3,-3]
+    wxv[2, 2] = 4.0 * wxv[3, 3] - wxv[4, 4]
+    wxv[-3, 2] = 4.0 * wxv[-4, 3] - wxv[-5, 4]
+    wxv[2, -3] = 4.0 * wxv[3, -4] - wxv[4, -5]
+    wxv[-3, -3] = 4.0 * wxv[-4, -4] - wxv[-5, -5]
+
+    ''' init of new bounds
+    # initialize result array with boundary-conditions
+    y_ = np.array([None for _ in range(len(y))]).reshape((bins, bins))
+    # now propagate the results above to the bounds
+    # "top"
+    y_[1,:] = wxv[2,:]
+    y_[0,:] = wxv[2,:]
+    # "bottom"
+    y_[-2,:] = wxv[-3,:]
+    y_[-1,:] = wxv[-3,:]
+    # "left"
+    y_[:,1] = wxv[:,2]
+    y_[:,0] = wxv[:,2]
+    # "right"
+    y_[:,-2] = wxv[:,-3]
+    y_[:,-1] = wxv[:,-3]
+    # corners neglected here!
+    y_ = y_.flatten() '''
 
     # flatten the coefficients
     d_x_pos_ = d_x_pos.flatten()
@@ -79,7 +98,7 @@ def fokker_planck_system(t, y):
     x_1_ = x_1.flatten()
 
     # receive first order upwind derivates
-    dwdx_pos, dwdx_neg, dwdv_pos, dwdv_neg = first_order_upwind(wxv, dx)
+    dwdx_pos, dwdx_neg, dwdv_pos, dwdv_neg = second_order_upwind(wxv, dx)
     # flatten those derivates
     dwdx_pos = dwdx_pos.flatten()
     dwdx_neg = dwdx_neg.flatten()
@@ -94,9 +113,8 @@ def fokker_planck_system(t, y):
     # now apply for each point in grid y
     y_ = np.empty(len(y)) # initilize result array
     for i in range(len(y)):
-        # I changed a sign, now it work more properly
-        #       |-- this one
-        #       v
+        #if y_[i] is not None:
+        #    continue
         y_[i] = + (epsilon - x_1_[i] ** 2) * y[i] + (g / 2) * d2wdv2[i] \
                 - d_x_pos_[i] * dwdx_pos[i] - d_x_neg_[i] * dwdx_neg[i] \
                 - d_v_pos_[i] * dwdv_pos[i] - d_v_neg_[i] * dwdv_neg[i]
