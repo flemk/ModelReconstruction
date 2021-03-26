@@ -50,80 +50,69 @@ d_v_neg[d_v_neg >= 0] = 0 # all positive values of d_x are replaced by 0 includi
 y = wxv.flatten()
 
 def fokker_planck_system(t, y):
-    if (t % 0.1 == 0):
+    if 1 or (t % .1 == 0):
         print('currently at t:%f' % (t))
 
     # calculate wxv "field" from 1d flattend array y
     wxv = y
     wxv = wxv.reshape((bins, bins))
 
+    # extended bounds
+    # used so that derivated use only valid values
+    wxv_extended = np.empty((bins + 4, bins + 4))
+    wxv_extended[2:-2, 2:-2] = wxv
     # apply neumann boundary conditions
-    # copy paste from Andreas
-    wxv[2, :] = (4.0 * wxv[3, :] - wxv[4, :]) / 3.
-    wxv[-3, :] = (4.0 * wxv[-4, :] - wxv[-5, :]) / 3.
-    wxv[:, -3] = (4.0 * wxv[:, -4] - wxv[:, -5]) / 3.
-    wxv[:, 2] = (4.0 * wxv[:, 3] - wxv[:, 4]) / 3.
+    # with extended bounds
+    wxv_extended[1, :] = (4. * wxv_extended[2, :] - wxv_extended[3, :]) / 3.
+    wxv_extended[-2, :] = (4. * wxv_extended[-3, :] - wxv_extended[-4, :]) / 3.
+    wxv_extended[:, -2] = (4. * wxv_extended[:, -3] - wxv_extended[:, -4]) / 3.
+    wxv_extended[:, 1] = (4. * wxv_extended[:, 2] - wxv_extended[:, 3]) / 3.
+    # extended bounds
+    # propagate the boundary conditions to bounds
+    wxv_extended[0, :] = wxv_extended[1, :]
+    wxv_extended[-1, :] = wxv_extended[-2, :]
+    wxv_extended[:, -1] = wxv_extended[:, -2]
+    wxv_extended[:, 0] = wxv_extended[:, 1]
     # at the corners
-    wxv[2, 2] = 4.0 * wxv[3, 3] - wxv[4, 4]
-    wxv[-3, 2] = 4.0 * wxv[-4, 3] - wxv[-5, 4]
-    wxv[2, -3] = 4.0 * wxv[3, -4] - wxv[4, -5]
-    wxv[-3, -3] = 4.0 * wxv[-4, -4] - wxv[-5, -5]
-
-    ''' init of new bounds
-    # initialize result array with boundary-conditions
-    y_ = np.array([None for _ in range(len(y))]).reshape((bins, bins))
-    # now propagate the results above to the bounds
-    # "top"
-    y_[1,:] = wxv[2,:]
-    y_[0,:] = wxv[2,:]
-    # "bottom"
-    y_[-2,:] = wxv[-3,:]
-    y_[-1,:] = wxv[-3,:]
-    # "left"
-    y_[:,1] = wxv[:,2]
-    y_[:,0] = wxv[:,2]
-    # "right"
-    y_[:,-2] = wxv[:,-3]
-    y_[:,-1] = wxv[:,-3]
-    # corners neglected here!
-    y_ = y_.flatten() '''
-
-    # flatten the coefficients
-    d_x_pos_ = d_x_pos.flatten()
-    d_x_neg_ = d_x_neg.flatten()
-    d_v_pos_ = d_v_pos.flatten()
-    d_v_neg_ = d_v_neg.flatten()
-
-    # flatten the axis
-    x_1_ = x_1.flatten()
+    # also propagated to outer bound
+    wxv_extended[1, 1] = 4. * wxv_extended[2, 2] - wxv_extended[3, 3]
+    wxv_extended[0, 0] = wxv_extended[1, 1]
+    wxv_extended[-2, 1] = 4. * wxv_extended[-3, 2] - wxv_extended[-4, 3]
+    wxv_extended[-1, 0] = wxv_extended[-1, 1]
+    wxv_extended[1, -2] = 4. * wxv_extended[2, -3] - wxv_extended[3, -4]
+    wxv_extended[0, -1] = wxv_extended[1, -2]
+    wxv_extended[-2, -2] = 4. * wxv_extended[-3, -3] - wxv_extended[-4, -4]
+    wxv_extended[-1, -1] = wxv_extended[-2, -2]
 
     # receive first order upwind derivates
-    dwdx_pos, dwdx_neg, dwdv_pos, dwdv_neg = second_order_upwind(wxv, dx)
-    # flatten those derivates
-    dwdx_pos = dwdx_pos.flatten()
-    dwdx_neg = dwdx_neg.flatten()
-    dwdv_pos = dwdv_pos.flatten()
-    dwdv_neg = dwdv_neg.flatten()
+    el = first_order_upwind(wxv_extended, dx)
+    # remove extended bounds
+    el = np.array(el)
+    el_ = []
+    for i in range(len(el)):
+        el_.append(el[i][2:-2, 2:-2])
+    dwdx_pos, dwdx_neg, dwdv_pos, dwdv_neg = el_
 
     # the second derivate of diffusion coefficient is constantly
-    d2wdv2 = (np.roll(wxv, shift=(0, -1), axis=(1, 0)) - 2 * wxv + np.roll(wxv, shift=(0, 1), axis=(1, 0))) / (dx ** 2)
-    # and flatten it aswell
-    d2wdv2 = d2wdv2.flatten()
+    d2wdv2 = (np.roll(wxv_extended, shift=(0, -1), axis=(1, 0)) \
+              - 2 * wxv_extended + np.roll(wxv_extended, shift=(0, 1), axis=(1, 0))) / (dx ** 2)
+    # remove extended bounds
+    d2wdv2 = d2wdv2[2:-2, 2:-2]
 
     # now apply for each point in grid y
-    y_ = np.empty(len(y)) # initilize result array
-    for i in range(len(y)):
-        #if y_[i] is not None:
-        #    continue
-        y_[i] = + (epsilon - x_1_[i] ** 2) * y[i] + (g / 2) * d2wdv2[i] \
-                - d_x_pos_[i] * dwdx_pos[i] - d_x_neg_[i] * dwdx_neg[i] \
-                - d_v_pos_[i] * dwdv_pos[i] - d_v_neg_[i] * dwdv_neg[i]
+    y_ = np.zeros(np.shape(wxv))
+    y_ = (+ (epsilon - x_1 ** 2) * wxv + (g / 2) * d2wdv2 \
+          - d_x_pos * dwdx_pos - d_x_neg * dwdx_neg \
+          - d_v_pos * dwdv_pos - d_v_neg * dwdv_neg)
+
+    # flatten for output
+    y_ = y_.flatten()
 
     return y_
 
 # solve_ivp(fun, t_span, y0, method='RK45', t_eval=None, **)
 ivp = wxv_ivp.flatten()
-sol = solve_ivp(fokker_planck_system, [0, 5], ivp, dense_output=True)
+sol = solve_ivp(fokker_planck_system, [0, 2], ivp, dense_output=True)
 
 # save the sol for later use
 np.save('./sol.npy', sol)
