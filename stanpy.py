@@ -84,7 +84,7 @@ class StochasticAnalysis:
         return self._drift
 
     def D_2(self, series, dt=1, bins=250, tau=1, transform=None):
-        ''' Retrieving n-dimensional Drift-Coefficient
+        ''' Retrieving n-dimensional Diffusion-Coefficient
 
         Parameters:
             - (array) series: array of n arrays which represent time series. n-dimensinal.
